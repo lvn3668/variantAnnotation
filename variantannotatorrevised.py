@@ -1,5 +1,5 @@
 # Author: Lalitha Viswanathan
-#!/usr/bin/env/python3
+# !/usr/bin/env/python3
 # from requests.auth import HHTPDigestAuth
 
 
@@ -9,7 +9,6 @@ import collections
 import csv
 import json
 import re
-import string
 import subprocess
 import sys
 import time
@@ -18,7 +17,6 @@ import xml.etree.ElementTree as ET
 from datetime import timedelta
 from typing import Union, TextIO, Any
 
-# import iterateDict as dictIterator
 import requests
 from requests.exceptions import HTTPError
 
@@ -28,12 +26,14 @@ import vcfpackage.vcfparserfunctions as vcfpkg
 import exacresponseutilities.exacutilities as exacpkg
 import vepannotationutilities as veppkg
 
+
 def convertTuple(tup):
     # initialize an empty string
     str = ''
     for item in tup:
         str = str + item
     return str
+
 
 def flatten(x):
     if isinstance(x, dict):
@@ -44,13 +44,17 @@ def flatten(x):
         return [x]
 
 
-def printlistofdicts(listofdicts):
+def printlistofdicts(listofdicts:list[dict]):
+    """
+
+    :param listofdicts: 
+    """
     for dict in listofdicts:
         for ky in dict.keys():
             print(ky + "\t" + dict[ky])
 
 
-def flatten(listofdictionaries):
+def flatten(listofdictionaries: list[dict]):
     if isinstance(listofdictionaries, dict):
         return [listofdictionaries]
     elif isinstance(listofdictionaries, collections.Iterable):
@@ -61,7 +65,7 @@ def flatten(listofdictionaries):
 
 def get_all_values(nested_dictionary):
     dict_values = dict()
-    #print("Inside function that prints all values from nested dict")
+    # print("Inside function that prints all values from nested dict")
     for key, value in nested_dictionary.items():
         if type(value) is dict:
             get_all_values(value)
@@ -227,7 +231,7 @@ def main(numberofconsecutiverepeatsofaltallele_RUN: dict = None,
         if line.startswith("##") is True & line.startswith("##INFO") is True:
             try:
                 substring: string = re.search(r"\<(.*?)\>", line).group(1)
-                #print(substring)
+                # print(substring)
             except AttributeError:
                 substring = ""
             # split the string on comma and then equals
@@ -265,51 +269,58 @@ def main(numberofconsecutiverepeatsofaltallele_RUN: dict = None,
             variantdictofdict[vcfkey] = variant_dict
             genotypequality_GQ[vcfkey] = variant[6]
             # write out allele balance (number of reads supporting homozygous to heterozygous calls at this position)
-            allelebalanceatheterozygoussites_AB = vcfpkg.altallelebalanceathetzygoussites(allelebalanceatheterozygoussites_AB,
-                                                                                   infofielddict, vcfkey)
+            allelebalanceatheterozygoussites_AB = vcfpkg.altallelebalanceathetzygoussites(
+                allelebalanceatheterozygoussites_AB,
+                infofielddict, vcfkey)
             # deviation between allele balance ref and allele balance alt using hoeffing's inequality
             allelebalanceprobabilityatheterozygousites_ABP = vcfpkg.allelebalanceprobatheterozygoussites(
                 allelebalanceprobabilityatheterozygousites_ABP, infofielddict, vcfkey)
             # write out individual INFO fields into dicts
             numaltalleles_AC = vcfpkg.numofaltallelesAC(infofielddict, numaltalleles_AC, vcfkey)
-            estimatedallelefrequency_AF = vcfpkg.estimatedallelefreqAF(estimatedallelefrequency_AF, infofielddict, vcfkey)
+            estimatedallelefrequency_AF = vcfpkg.estimatedallelefreqAF(estimatedallelefrequency_AF, infofielddict,
+                                                                       vcfkey)
             refalleleobscount_RO = vcfpkg.refalleleobservationcountRO(infofielddict, refalleleobscount_RO, vcfkey)
             numberofconsecutiverepeatsofaltallele_RUN = vcfpkg.noofconsecutiverepeatsofaltalleleRUN(infofielddict,
-                                                                                             numberofconsecutiverepeatsofaltallele_RUN,
-                                                                                             vcfkey)
-            readplacementprobability_RPP = vcfpkg.readplacementprobRPP(infofielddict, readplacementprobability_RPP, vcfkey)
+                                                                                                    numberofconsecutiverepeatsofaltallele_RUN,
+                                                                                                    vcfkey)
+            readplacementprobability_RPP = vcfpkg.readplacementprobRPP(infofielddict, readplacementprobability_RPP,
+                                                                       vcfkey)
             readplacementprobabilityforreference_RPPR = vcfpkg.readplacementprobrefalleleRPPR(infofielddict,
-                                                                                       readplacementprobabilityforreference_RPPR,
-                                                                                       vcfkey)
+                                                                                              readplacementprobabilityforreference_RPPR,
+                                                                                              vcfkey)
             totalnumberofallelesincalledgenotype_AN = vcfpkg.totalnoofallelesincalledgenotypeAN(infofielddict,
-                                                                                         totalnumberofallelesincalledgenotype_AN,
-                                                                                         vcfkey)
-            alternatealleleobservations_AO = vcfpkg.altalleleobsAO(alternatealleleobservations_AO, infofielddict, vcfkey)
+                                                                                                totalnumberofallelesincalledgenotype_AN,
+                                                                                                vcfkey)
+            alternatealleleobservations_AO = vcfpkg.altalleleobsAO(alternatealleleobservations_AO, infofielddict,
+                                                                   vcfkey)
             cigarstring_CIGAR = vcfpkg.cigarstringCIGAR(cigarstring_CIGAR, infofielddict, vcfkey)
             readdepthforcalledgenotype_infofield_DP = vcfpkg.readdepthforcalledgenotypeininfofieldDP(infofielddict,
-                                                                                              readdepthforcalledgenotype_infofield_DP,
-                                                                                              vcfkey)
+                                                                                                     readdepthforcalledgenotype_infofield_DP,
+                                                                                                     vcfkey)
             readdepthforcalledgenotypeperbasepair_DPB = vcfpkg.readdepthforcalledgenotypeperbpDPB(infofielddict,
-                                                                                           readdepthforcalledgenotypeperbasepair_DPB,
-                                                                                           vcfkey)
+                                                                                                  readdepthforcalledgenotypeperbasepair_DPB,
+                                                                                                  vcfkey)
             altalleledeptratio_DPRA = vcfpkg.altalleledepthratioDPRA(altalleledeptratio_DPRA, infofielddict, vcfkey)
             endplacementprob_EPP = vcfpkg.endplacementprobabilityEPP(endplacementprob_EPP, infofielddict, vcfkey)
-            endplacementprobref_EPPR = vcfpkg.endplacementprobforrefalleleEPPR(endplacementprobref_EPPR, infofielddict, vcfkey)
+            endplacementprobref_EPPR = vcfpkg.endplacementprobforrefalleleEPPR(endplacementprobref_EPPR, infofielddict,
+                                                                               vcfkey)
             genotypeiterations_GTI = vcfpkg.genotypeiterationsGTI(genotypeiterations_GTI, infofielddict, vcfkey)
             allelelength_LEN = vcfpkg.allelelengthLEN(allelelength_LEN, infofielddict, vcfkey)
             meannoofaltallelespersample_MEANALT = vcfpkg.meannoofaltallelespersampleMEANALT(infofielddict,
-                                                                                     meannoofaltallelespersample_MEANALT,
-                                                                                     vcfkey)
+                                                                                            meannoofaltallelespersample_MEANALT,
+                                                                                            vcfkey)
             meanmapqualaltallele_MQM = vcfpkg.meanmapqualaltalleleMQM(infofielddict, meanmapqualaltallele_MQM, vcfkey)
-            meanmapqualrefallele_MQMR = vcfpkg.meanmapqualrefalleleMQMR(infofielddict, meanmapqualrefallele_MQMR, vcfkey)
+            meanmapqualrefallele_MQMR = vcfpkg.meanmapqualrefalleleMQMR(infofielddict, meanmapqualrefallele_MQMR,
+                                                                        vcfkey)
             numberofsampleswithdata_NS = vcfpkg.noofsampleswithdataNS(infofielddict, numberofsampleswithdata_NS, vcfkey)
             numofaltalleleobspersample_NUMALT = vcfpkg.numofaltallleleobspersampleNUMALT(infofielddict,
-                                                                                  numofaltalleleobspersample_NUMALT,
-                                                                                  vcfkey)
+                                                                                         numofaltalleleobspersample_NUMALT,
+                                                                                         vcfkey)
             logoddsratio_ODDS = vcfpkg.logoddsratioODDS(infofielddict, logoddsratio_ODDS, vcfkey)
             typeofallele_TYPE = vcfpkg.typeofalleleTYPE(infofielddict, typeofallele_TYPE, vcfkey)
-            altalleleobscount_partial_PAO = vcfpkg.altalleleobscountpartialPAO(altalleleobscount_partial_PAO, infofielddict,
-                                                                        vcfkey)
+            altalleleobscount_partial_PAO = vcfpkg.altalleleobscountpartialPAO(altalleleobscount_partial_PAO,
+                                                                               infofielddict,
+                                                                               vcfkey)
             altallelephredqualitysumpartialobs_PQA = vcfpkg.altallelephredqualsumspartialobsPQA(
                 altallelephredqualitysumpartialobs_PQA, vcfkey, infofielddict)
             refallelephredqualitysumpartialobs_PQR = vcfpkg.refallelephredqualsumspartialobsPQR(
@@ -342,17 +353,17 @@ def main(numberofconsecutiverepeatsofaltallele_RUN: dict = None,
                     variantzygosity = calculatezygosity(field, variantploidy, variantzygosity, vcfkey)
                 elif field == 'GQ':
                     genotypequality_GQ = vcfpkg.assignGenotypeQualityGQ(formatfieldcounter, formatvaluesfield,
-                                                                 genotypequality_GQ, vcfkey)
+                                                                        genotypequality_GQ, vcfkey)
                 elif field == 'DP':
                     readdepthforcalledgenotype_formatfield_DP = vcfpkg.readdepthforcalledgenotype_DP(formatfieldcounter,
-                                                                                              formatvaluesfield,
-                                                                                              readdepthforcalledgenotype_formatfield_DP,
-                                                                                              vcfkey)
+                                                                                                     formatvaluesfield,
+                                                                                                     readdepthforcalledgenotype_formatfield_DP,
+                                                                                                     vcfkey)
                 elif field == 'DPR':
                     numberofobsforeachallele_DPR = vcfpkg.numberofobservationsforeachallele_DPR(formatfieldcounter,
-                                                                                         formatvaluesfield,
-                                                                                         numberofobsforeachallele_DPR,
-                                                                                         vcfkey)
+                                                                                                formatvaluesfield,
+                                                                                                numberofobsforeachallele_DPR,
+                                                                                                vcfkey)
                 elif field == 'QR':
                     sumofqualityofrefobs_formatfield_QR = vcfpkg.sumofqualityscoresforrefallelesinformatfield_QR(
                         formatfieldcounter, formatvaluesfield,
@@ -362,10 +373,11 @@ def main(numberofconsecutiverepeatsofaltallele_RUN: dict = None,
                         formatfieldcounter, formatvaluesfield,
                         sumofqualityofaltobs_formatfield_QA, vcfkey)
                 elif field == 'RO':
-                    refalleleobscount_formatfield_RO = vcfpkg.refalleleobservationcountsinformatfield_RO(formatfieldcounter,
-                                                                                                  formatvaluesfield,
-                                                                                                  refalleleobscount_formatfield_RO,
-                                                                                                  vcfkey)
+                    refalleleobscount_formatfield_RO = vcfpkg.refalleleobservationcountsinformatfield_RO(
+                        formatfieldcounter,
+                        formatvaluesfield,
+                        refalleleobscount_formatfield_RO,
+                        vcfkey)
                 elif field == 'AO':
                     altalleleobscount_formatfield_AO = vcfpkg.altalleleobservationcountinformatfield_AO(
                         altalleleobscount_formatfield_AO, formatfieldcounter,
@@ -435,12 +447,12 @@ def main(numberofconsecutiverepeatsofaltallele_RUN: dict = None,
                 exacannotationsforeachvariant[vcfkey] = get_all_values(exac_response)
                 keys_list = list(exacannotationsforeachvariant[vcfkey].keys())
                 valuestring = {str(value) for value in exacannotationsforeachvariant[vcfkey].values()}
-                #print(valuestring)
+                # print(valuestring)
                 keysstring = "\t".join(keys_list)
-                #print(keysstring)
+                # print(keysstring)
                 # # Adding additional annotations from ExAC as per SNPEff
                 if "vep_annotations" in exac_response:
-                    #initializefieldsinvepannotations()
+                    # initializefieldsinvepannotations()
                     ccdsstring: list[string] = []
                     hgvspstring: list[string] = []
                     enspstring: list[string] = []
@@ -494,24 +506,24 @@ def main(numberofconsecutiverepeatsofaltallele_RUN: dict = None,
                     #######################
                     # Create Annotation String#
                     vepannotationsfromexac = zip(to_utf8(Allelestrings), to_utf8(consequencestrings),
-                                              to_utf8(majorconsequencestrings), to_utf8(genenamestrings),
-                                              to_utf8(symbolStrings), to_utf8(codonstrings),
-                                              to_utf8(motifnametrings),
-                                              to_utf8(hgncidstrings), to_utf8(Feature_typestrings),
-                                              to_utf8(Featurestrings), to_utf8(biotypestrings),
-                                              to_utf8(HGVScstrings), to_utf8(HGVSpstrings),
-                                              to_utf8(exonstrings), to_utf8(intronstrings),
-                                              to_utf8(HGVScstrings), to_utf8(HGVSpstrings),
-                                              to_utf8(siftstrings), to_utf8(ccdsstring),
-                                              to_utf8(proteinPositionstrings), to_utf8(polyphenstring),
-                                              to_utf8(enspstring), to_utf8(existingvariationstring),
-                                              to_utf8(swissprotstring), to_utf8(uniparcstring),
-                                              to_utf8(domainstring), to_utf8(tremblstring),
-                                              to_utf8(clinicalsignificancestring), to_utf8(pubmedstring),
-                                              to_utf8(motifscorechange), to_utf8(gmafstring),
-                                              to_utf8(somaticstring), to_utf8(canonicalstring),
-                                              to_utf8(asnmafstring), to_utf8(amrmafstring),
-                                              to_utf8(CDSPositionstrings), to_utf8(cDNAPositionstrings))
+                                                 to_utf8(majorconsequencestrings), to_utf8(genenamestrings),
+                                                 to_utf8(symbolStrings), to_utf8(codonstrings),
+                                                 to_utf8(motifnametrings),
+                                                 to_utf8(hgncidstrings), to_utf8(Feature_typestrings),
+                                                 to_utf8(Featurestrings), to_utf8(biotypestrings),
+                                                 to_utf8(HGVScstrings), to_utf8(HGVSpstrings),
+                                                 to_utf8(exonstrings), to_utf8(intronstrings),
+                                                 to_utf8(HGVScstrings), to_utf8(HGVSpstrings),
+                                                 to_utf8(siftstrings), to_utf8(ccdsstring),
+                                                 to_utf8(proteinPositionstrings), to_utf8(polyphenstring),
+                                                 to_utf8(enspstring), to_utf8(existingvariationstring),
+                                                 to_utf8(swissprotstring), to_utf8(uniparcstring),
+                                                 to_utf8(domainstring), to_utf8(tremblstring),
+                                                 to_utf8(clinicalsignificancestring), to_utf8(pubmedstring),
+                                                 to_utf8(motifscorechange), to_utf8(gmafstring),
+                                                 to_utf8(somaticstring), to_utf8(canonicalstring),
+                                                 to_utf8(asnmafstring), to_utf8(amrmafstring),
+                                                 to_utf8(CDSPositionstrings), to_utf8(cDNAPositionstrings))
                     finalData = setfinaldata()
                     print("VEP Annotations from Exac ")
                     print(list(vepannotationsfromexac))
@@ -552,7 +564,6 @@ def main(numberofconsecutiverepeatsofaltallele_RUN: dict = None,
                 print(f'Other error occurred: {err}')
 
 
-
 def initializefieldsinvepannotations():
     veppkg.allelesinvepannotations()
     veppkg.consequencesinvepannotations()
@@ -588,11 +599,21 @@ def initializefieldsinvepannotations():
 
 
 def setfinaldata():
+    """
+
+    :return: 
+    """
     finalData = ''
     return finalData
 
 
 def setdavidannotationsrestapiendpoint(ensgs):
+    """
+
+    :rtype: object
+    :param ensgs: 
+    :return: 
+    """
     string: Union[
         str, Any] = "http://david.abcc.ncifcrf.gov/api.jsp?type=ENSEMBL_GENE_ID&ids=" + ensgs + "&tool=geneReportFull"
     return string
@@ -601,7 +622,6 @@ def setdavidannotationsrestapiendpoint(ensgs):
 def setemsemblserverrestapi():
     server = "https://rest.ensembl.org"
     return server
-
 
 
 def calculatezygosity(field, variantploidy, variantzygosity, vcfkey):
@@ -650,10 +670,8 @@ def assignphasingtovariants(formatfieldcounter, formatvaluesfield, variantphased
     return variantphased
 
 
-
 def linewithchromosomeinfo():
     chromelinekeys = []
-
 
 
 # print(variantdictofdict['7117']['INFO'])
@@ -671,12 +689,10 @@ def gettypeofvariants(d, consequencestr):
     # print(d)
     for k, v in d.items():
         if type(v) is dict:
-            # print("Inside if")
             gettypeofvariants(v, consequencestr)
         elif k.equals("Consequence"):
             # print("Inside else")
             consequencestr.append(":").v
-            # print(consequencestr, "\n")
     return consequencestr
 
 
@@ -688,20 +704,18 @@ def to_utf8(d):
 
 
 def utf8(d):
-    print("@@@@@@@\n")
-    print(type(d))
     # print ast.literal_eval(json.dumps(d))
     d1 = ast.literal_eval(json.dumps(d))
     return d1
 
 
-def printDict(d):
-    d = ast.literal_eval(json.dumps(d))
-    for k, v in d.items():
-        if type(v) is dict:
-            printDict(v)
+def printDict(dict):
+    dict = ast.literal_eval(json.dumps(dict))
+    for key, value in dict.items():
+        if type(value) is dict:
+            printDict(value)
         else:
-            print("{0} : {1}".format(str(k), str(v)))
+            print("{0} : {1}".format(str(key), str(value)))
 
 
 if __name__ == "__main__":

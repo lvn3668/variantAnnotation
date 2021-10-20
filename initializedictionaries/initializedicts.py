@@ -89,101 +89,177 @@ def initdicts():
 
 
 def altalleleobscountformatfield():
+    """
+
+    :return: 
+    """
     altalleleobscount_formatfield_AO: dict[string, string] = dict()
     return altalleleobscount_formatfield_AO
 
 
 def noofobsforeachalleleDPR():
+    """
+
+    :return: 
+    """
     numberofobsforeachallele_DPR: dict[string, string] = dict()
     return numberofobsforeachallele_DPR
 
 
 def exacannotationsforeachvariantinvcf():
+    """
+
+    :return: 
+    """
     exacannotationsforeachvariant: dict[string, string] = dict()
     return exacannotationsforeachvariant
 
 
 def refalleleobscountformatfield():
+    """
+
+    :return: 
+    """
     refalleleobscount_formatfield_RO: dict[string, string] = dict()
     return refalleleobscount_formatfield_RO
 
 
 def readdepthforcalledgenotypeinformatfield():
+    """
+
+    :return: 
+    """
     readdepthforcalledgenotype_formatfield_DP: dict[string, string] = dict()
     return readdepthforcalledgenotype_formatfield_DP
 
 
 def numberofaltallelesobsonreversestrand():
+    """
+
+    :return: 
+    """
     numberofaltobservationsonreversestrand_SAR: dict[string, string] = dict()
     return numberofaltobservationsonreversestrand_SAR
 
 
 def numberofaltalleleobsonfwdstrand():
+    """
+
+    :return: 
+    """
     numberofaltobservationsonfwdstrand_SAF: dict[string, string] = dict()
     return numberofaltobservationsonfwdstrand_SAF
 
 
 def numberofrefallelesobsonrevstrand():
+    """
+
+    :return: 
+    """
     numberofrefobsonreversestrand_SRR: dict[string, string] = dict()
     return numberofrefobsonreversestrand_SRR
 
 
 def numberofrefallelesobsonfwdstrand():
+    """
+
+    :return: 
+    """
     numberofrefobsonfwdstrand_SRF: dict[string, string] = dict()
     return numberofrefobsonfwdstrand_SRF
 
 
 def strandbalanceprobrefallele():
+    """
+
+    :return: 
+    """
     strandbalanceprobability_refallele_SRP: dict[string, string] = dict()
     return strandbalanceprobability_refallele_SRP
 
 
 def strandbalanceprobaltallele():
+    """
+
+    :return: 
+    """
     strandbalanceprobability_altallele_SAP: dict[string, string] = dict()
     return strandbalanceprobability_altallele_SAP
 
 
 def refallelesphredqualsumofpartialobs():
+    """
+
+    :return: 
+    """
     refallelephredqualitysumpartialobs_PQR: dict[string, string] = dict()
     return refallelephredqualitysumpartialobs_PQR
 
 
 def altallelesphredqualsumofpartialobs():
+    """
+
+    :return: 
+    """
     altallelephredqualitysumpartialobs_PQA: dict[string, string] = dict()
     return altallelephredqualitysumpartialobs_PQA
 
 
 def numofrefallelesupportedbypairedreaddata():
+    """
+
+    :return: 
+    """
     numberofrefalleleobssupportedbypairedreaddata_PAIREDR: dict[string, string] = dict()
     return numberofrefalleleobssupportedbypairedreaddata_PAIREDR
 
 
 def numofaltallelessupportedbypairedreaddata():
+    """
+
+    :return: 
+    """
     numberofaltalleleobssupportedbypairedreaddata_PAIRED: dict[string, string] = dict()
     return numberofaltalleleobssupportedbypairedreaddata_PAIRED
 
 
 def minreaddepthingvcfblock():
+    """
+
+    :return: 
+    """
     mindepthingvcfblock: dict[string, string] = dict()
     return mindepthingvcfblock
 
 
 def sumqualitiesrefallelecounts():
+    """
+
+    :return: 
+    """
     sumqualityrefallelecount: dict[string, string] = dict()
     return sumqualityrefallelecount
 
 
 def minimumreaddepth():
+    """
+
+    :return: 
+    """
     minreaddepth: dict[string, string] = dict()
     return minreaddepth
 
 
 def proportionofrefallelesproperlypaired():
+    """
+
+    :return: 
+    """
     proprefallelesproperlypaired: dict[string, string] = dict()
     return proprefallelesproperlypaired
 
 
-def proportionofallelesproperlypaired():
+def proportionofallelesproperlypaired() -> dict:
     propaltallelesproprerlypaired: dict[string, string] = dict()
     return propaltallelesproprerlypaired
 
